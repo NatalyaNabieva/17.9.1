@@ -1,37 +1,38 @@
-def insertion_sort(num):
-    for i in range(1, len(num)):
-        x = num[i]
+def num_sort(list_int):
+    for i in range(1, len(list_int)):
+        x = list_int[i]
         idx = i
-        while idx > 0 and num[idx - 1] > x:
-            num[idx] = num[idx - 1]
+        while idx > 0 and list_int[idx - 1] > x:
+            list_int[idx] = list_int[idx - 1]
             idx -= 1
-        num[idx] = x
-    return num
+        list_int[idx] = x
+    return list_int
 
-def binary_search(array, element, left, right):
+def index_search(array, element, left, right):
     if left > right:
-        return False
-    if element > array[-1] or element < array[0]:
-        return print("Введеное число находится вне границ поиска")
-    if element == array[-1]:
-        return print("Введеное число является максимальным в списке")
-    if element == array[0]:
-        return print("Введенное число является минимальным в списке")
+        return right
+    middle = (right + left) // 2
+    if array[middle] == element:
+        return middle
+    elif element < array[middle]:
+        return index_search(array, element, left, middle - 1)
     else:
-        middle = (right + left) // 2
-        if array[middle] >= element:
-            return middle-1
-        elif element < array[middle]:
-            return binary_search(array, element, left, middle - 1)
-        else:
-            return binary_search(array, element, middle + 1, right)
+        return index_search(array, element, middle + 1, right)
 
+numbers_str = input("Введите последовательность чисел в любом порядке через пробел: ")
+numbers_list = list(map(int, numbers_str.split()))
+numbers_sorted =num_sort(numbers_list)
+element = int(input("Введите любое число: "))
 
-numbers = [int(x) for x in input("Введите несколько чисел в любом порядке через пробел: ").split()]
-
-element = int(input("Введите любое число:"))
-numbers_sort = insertion_sort(numbers)
-#print(numbers_sort)
-
-
-print(binary_search(numbers_sort, element, 0, len(numbers_sort)))
+for i in numbers_sorted:
+   if  min(numbers_sorted) > element:
+     print("Число не соответствует заданному условию, повторите ввод: ")
+     element = int(input("Введите любое число: "))
+   elif  max(numbers_sorted)< element:
+       print("Число не соответствует заданному условию, повторите ввод: ")
+       element = int(input("Введите любое число: "))
+   elif i== element:
+       break
+print("Числа по возрастанию: ", numbers_sorted)
+element_index = index_search(numbers_sorted, element, 0, len(numbers_sorted))
+print("Индекс элемента: ", element_index)
